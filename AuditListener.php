@@ -5,7 +5,7 @@
  *
  * This repository contains an eZ Platform 3.0 compatible Event Subscriber
  * that implements a simple audit trail logging functionality Proof of Concept.
- * 
+ *
  * eZ Platform is built on the Symfony Framework. To enable this Event Subscriber
  * you should make sure it is configured appropriately in config/services.yaml
  * - https://symfony.com/doc/current/event_dispatcher.html#creating-an-event-subscriber
@@ -39,7 +39,7 @@ class AuditListener implements EventSubscriberInterface
     private $locationService;
 
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface $auditLogger,
         PermissionResolver $permissionResolver,
         UserService $userService,
         ContentService $contentService,
@@ -47,7 +47,7 @@ class AuditListener implements EventSubscriberInterface
         LocationService $locationService
     )
     {
-        $this->logger = $logger;
+        $this->logger = $auditLogger;
         $this->permissionResolver = $permissionResolver;
         $this->userService = $userService;
         $this->contentService = $contentService;
@@ -91,7 +91,7 @@ class AuditListener implements EventSubscriberInterface
         $content = $event->getContent();
         $contentName = $content->getName();
         $currentUserId = $this->permissionResolver
-                              ->getCurrentUserReference()->getUserId();
+            ->getCurrentUserReference()->getUserId();
         $currentUser = $this->userService->loadUser($currentUserId);
 
         $buffer = <<< BUFFER_TEMPLATE
